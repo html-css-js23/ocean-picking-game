@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ocean Picking Game</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <div id="game-container">
+    <div id="background"></div>
+    <div id="plastic"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<style>
+#game-container {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+}
+
+#background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('ocean.jpg'); /* Replace with your own background image */
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  animation: scroll-background 5s linear infinite;
+}
+
+@keyframes scroll-background {
+  0% { background-position: 0 0; }
+  100% { background-position: -100% 0; }
+}
+
+#plastic {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: red; /* Replace with your own plastic image */
+  top: 50%;
+  left: -50px; /* Start outside the left edge of the game container */
+  animation: move-plastic 3s linear infinite;
+}
+
+@keyframes move-plastic {
+  0% { left: -50px; }
+  100% { left: calc(100% + 50px); } /* Move outside the right edge of the game container */
+}
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const plastic = document.getElementById('plastic');
+
+  // Randomly position the plastic on the Y-axis
+  plastic.style.top = `${getRandomInt(10, 90)}%`;
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+});
+</script>
