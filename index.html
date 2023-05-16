@@ -29,11 +29,11 @@
 		plasticImage.src = "plastic.png";
 
 		let score = 0;
-		let speed = 750;
+		let speed = 100; // Adjust the speed here (lower value for slower speed)
 		let isGameOver = false;
 
-		const plasticWidth = 50;
-		const plasticHeight = 50;
+		const plasticWidth = 125;
+		const plasticHeight = 125;
 		let plasticX = canvas.width - plasticWidth;
 		let plasticY = Math.random() * (canvas.height - plasticHeight);
 
@@ -98,7 +98,7 @@
 						score++;
 						resetPlastic();
 						if (score === 15) {
-							speed -= 500;
+							speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
 						}
 						if (score >= 30) {
 							isGameOver = true;
@@ -106,28 +106,36 @@
 						}
 					}
 				}
+							if (score < 0) {
+				isGameOver = true;
+				gameOver();
 			}
 		}
+	}
 
-		canvas.addEventListener("click", function(event) {
-    const rect = canvas.getBoundingClientRect();
-    const mousePos = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
-   };
-     if (!isGameOver) {
+	canvas.addEventListener("click", function(event) {
+		const rect = canvas.getBoundingClientRect();
+		const mousePos = {
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top
+		};
+
+		if (!isGameOver) {
 			if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
 				if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
 					score++;
 					resetPlastic();
 					if (score === 15) {
-						speed -= 500;
+						speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
 					}
 					if (score >= 30) {
 						isGameOver = true;
 						gameOver();
 					}
 				}
+			}
+			else {
+				score--;
 			}
 		}
 	});
