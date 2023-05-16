@@ -1,93 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ocean Picking Game</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="UTF-8">
+	<title>Ocean Picking Game</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
 </head>
 <body>
-  <div id="game-container">
-    <div id="background"></div>
-    <div id="score">Score: 0</div>
-    <div id="plastic"></div>
-  </div>
+	<canvas id="canvas"></canvas>
+	<script>
+		const canvas = document.getElementById("canvas");
+		const ctx = canvas.getContext("2d");
 
-  <script src="script.js"></script>
-</body>
-</html>
-<style>
-#game-container {
-  position: relative;
-  width: 800px;
-  height: 600px;
-  overflow: hidden;
-}
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 
-#background {
-  position: absolute;
-  width: 100%; /* Set width to 100% */
-  height: 100%; /* Set height to 100% */
-  background-image: url('ocean.jpg'); /* Replace 'ocean.png' with your own PNG image file */
-  background-size: cover; /* Use cover to fill the screen */
-  background-repeat: repeat-x; /* Repeat only along the x-axis */
-  animation: scroll-background 5s linear infinite;
-}
+		const oceanImage = new Image();
+		oceanImage.src = "ocean.jpg";
 
-@keyframes scroll-background {
-  from {
-    background-position: 0;
-  }
-  to {
-    background-position: -300px;
-  }
-}
+		const plasticImage = new Image();
+		plasticImage.src = "plastic.png";
 
-#plastic {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background-image: url('plastic.png'); /* Replace with your own plastic image */
-  top: 50%;
-  left: -50px; /* Start outside the left edge of the game container */
-  animation: move-plastic 3s linear infinite;
-  cursor: pointer;
-}
+		let score = 0;
+		let speed = 2000;
+		let isGameOver = false;
 
-@keyframes move-plastic {
-  0% { left: -50px; }
-  100% { left: calc(100% + 50px); } /* Move outside the right edge of the game container */
-}
+		const plasticWidth = 50;
+		const plasticHeight = 50;
+		let plasticX = canvas.width - plasticWidth;
+		let plasticY = Math.random() * (canvas.height - plasticHeight);
 
-#score {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-}
-</style>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const plastic = document.getElementById('plastic');
-  const scoreDisplay = document.getElementById('score');
-  let score = 0;
+		function movePlastic() {
+			plasticX -= (speed / 1000) * 10;
+			if (plasticX + plasticWidth <= 0) {
+				resetPlastic();
+				if (score > 0) {
+					score--;
+				}
+			}
+		}
 
-  // Randomly position the plastic on the Y-axis
-  plastic.style.top = `${getRandomInt(10, 90)}%`;
+		function resetPlastic() {
+			plasticX = canvas.width - plasticWidth;
+			plasticY = Math.random() * (canvas.height - plasticHeight);
+		}
 
-  // Add click event listener to the plastic sprite
-  plastic.addEventListener('click', () => {
-    plastic.style.display = 'none'; // Hide the plastic sprite
-    score++; // Increase the score
-    scoreDisplay.textContent = `Score: ${score}`; // Update the score display
-    setTimeout(() => {
-      plastic.style.display = 'block'; // Show the plastic sprite again after a delay
-      plastic.style.top = `${getRandomInt(10, 90)}%`; // Reposition the plastic sprite
-    }, getRandomInt(3000, 5000)); // Random delay before reappearing (3-5 seconds)
-  });
+		function drawPlastic() {
+			ctx.drawImage(plasticImage, plasticX, plasticY, plasticWidth, plasticHeight);
+		}
 
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-});
+		function drawScore() {
+			ctx.fillStyle = "white";
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Score: " + score, 20, 40);
+		}
+
+		function drawBackground() {
+			ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
+		}
+
+		function gameOver() {
+			ctx.fillStyle = "black";
+			ctx.globalAlpha = 0.7;
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			ctx.fillStyle = "white";
+			ctx.globalAlpha = 1;
+			ctx.font = "bold 48px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 60);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Press F5 to play again", canvas.width / 2, canvas.height / 2 + 60);
+		}
+
+		function update() {
+			if (!isGameOver) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				drawBackground();
+				drawPlastic();
+				movePlastic();
+				drawScore();
+
+				if (plasticX <= canvas.width / 3 && plasticX + plasticWidth >= canvas.width / 3) {
+					if (plasticY <= canvas.height - 50 && plasticY + plasticHeight >= canvas.height - 50) {
+						score++;
+						resetPlastic();
+						if (score === 15) {
+							speed -= 500;
+						}
+						if (score >= 30) {
+							isGameOver = true;
+							gameOver();
+						}
+					}
+				}
+			}
+		}
+
+		canvas.addEventListener("click", function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const mousePos = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+   };
+     if (!isGameOver) {
+			if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
+				if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
+					score++;
+					resetPlastic();
+					if (score === 15) {
+						speed -= 500;
+					}
+					if (score >= 30) {
+						isGameOver = true;
+						gameOver();
+					}
+				}
+			}
+		}
+	});
+
+	setInterval(update, 10);
 </script>
