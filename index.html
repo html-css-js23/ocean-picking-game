@@ -7,6 +7,7 @@
 <body>
   <div id="game-container">
     <div id="background"></div>
+    <div id="score">Score: 0</div>
     <div id="plastic"></div>
   </div>
 
@@ -25,7 +26,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('https://thumbs.dreamstime.com/b/pixel-art-water-background-seamless-sea-texture-backdrop-vector-illustration-223655049.jpg'); /* Replace with your own background image */
+  background-image: url('ocean.jpg'); /* Replace with your own background image */
   background-position: 0 0;
   background-repeat: repeat-x;
   animation: scroll-background 5s linear infinite;
@@ -44,19 +45,42 @@
   top: 50%;
   left: -50px; /* Start outside the left edge of the game container */
   animation: move-plastic 3s linear infinite;
+  cursor: pointer;
 }
 
 @keyframes move-plastic {
   0% { left: -50px; }
   100% { left: calc(100% + 50px); } /* Move outside the right edge of the game container */
 }
+
+#score {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
 </style>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const plastic = document.getElementById('plastic');
+  const scoreDisplay = document.getElementById('score');
+  let score = 0;
 
   // Randomly position the plastic on the Y-axis
   plastic.style.top = `${getRandomInt(10, 90)}%`;
+
+  // Add click event listener to the plastic sprite
+  plastic.addEventListener('click', () => {
+    plastic.style.display = 'none'; // Hide the plastic sprite
+    score++; // Increase the score
+    scoreDisplay.textContent = `Score: ${score}`; // Update the score display
+    setTimeout(() => {
+      plastic.style.display = 'block'; // Show the plastic sprite again after a delay
+      plastic.style.top = `${getRandomInt(10, 90)}%`; // Reposition the plastic sprite
+    }, getRandomInt(3000, 5000)); // Random delay before reappearing (3-5 seconds)
+  });
 
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
