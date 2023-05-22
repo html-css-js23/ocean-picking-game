@@ -114,13 +114,14 @@
 				drawPlastic();
 				movePlastic();
 				drawScore();
+				uwu();
 
 				if (plasticX <= canvas.width / 3 && plasticX + plasticWidth >= canvas.width / 3) {
 					if (plasticY <= canvas.height - 50 && plasticY + plasticHeight >= canvas.height - 50) {
 						score++;
 						resetPlastic();
 						if (score === 15) {
-							speed += 300; // Adjust the speed decrease here (lower value for slower speed)
+							speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
 						}
 						if (score >= 30) {
 							isGameOver = true;
