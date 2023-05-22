@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Ocean Picking Game</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		const canvas = document.getElementById("canvas");
+		const ctx = canvas.getContext("2d");
 
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		const oceanImage = new Image();
+		oceanImage.src = "ocean.jpg";
+
+		const plasticImage = new Image();
+		plasticImage.src = "plastic.png";
+
+		let score = 0;
+		let speed = 650; // Adjust the speed here (lower value for slower speed)
+		let isGameOver = false;
+
+		const plasticWidth = 125;
+		const plasticHeight = 125;
+		let plasticX = canvas.width - plasticWidth;
+		let plasticY = Math.random() * (canvas.height - plasticHeight);
+
+		function movePlastic() {
+			plasticX -= (speed / 1000) * 10;
+			if (plasticX + plasticWidth <= 0) {
+				resetPlastic();
+				if (score > 0) {
+					score--;
+				}
+			}
+		}
+
+		function resetPlastic() {
+			plasticX = canvas.width - plasticWidth;
+			plasticY = Math.random() * (canvas.height - plasticHeight);
+		}
+
+		function drawPlastic() {
+			ctx.drawImage(plasticImage, plasticX, plasticY, plasticWidth, plasticHeight);
+		}
+
+		function drawScore() {
+			ctx.fillStyle = "white";
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Score: " + score, 20, 40);
+		}
+
+		function drawBackground() {
+			ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
+		}
+
+		function gameOver() {
+			ctx.fillStyle = "black";
+			ctx.globalAlpha = 0.7;
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			ctx.fillStyle = "white";
+			ctx.globalAlpha = 1;
+			ctx.font = "bold 48px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 60);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Press F5 to play again", canvas.width / 2, canvas.height / 2 + 60);
+		}
+		
+		function gameWin() {
+			ctx.fillStyle = "black";
+			ctx.globalAlpha = 0.7;
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			ctx.fillStyle = "white";
+			ctx.globalAlpha = 1;
+			ctx.font = "bold 48px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("!You win!", canvas.width / 2, canvas.height / 2 - 60);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2);
+
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Press F5 to play again", canvas.width / 2, canvas.height / 2 + 60);
+		}
+		function update() {
+			if (!isGameOver) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				drawBackground();
+				drawPlastic();
+				movePlastic();
+				drawScore();
+
+				if (plasticX <= canvas.width / 3 && plasticX + plasticWidth >= canvas.width / 3) {
+					if (plasticY <= canvas.height - 50 && plasticY + plasticHeight >= canvas.height - 50) {
+						score++;
+						resetPlastic();
+						if (score === 15) {
+							speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
+						}
+						if (score >= 30) {
+							isGameOver = true;
+							gameOver();
+						}
+					}
+				}
+							if (score < 0) {
+				isGameOver = true;
+				gameOver();
+			}
+		}
+	}
+
+	canvas.addEventListener("click", function(event) {
+		const rect = canvas.getBoundingClientRect();
+		const mousePos = {
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top
+		};
+
+		if (!isGameOver) {
+			if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
+				if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
+					score++;
+					resetPlastic();
+					if (score === 15) {
+						speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
+					}
+					if (score >= 30) {
+						isGameOver = true;
+						gameWin();
+					}
+				}
+			}
+			else {
+				score--;
+			}
+		}
+	});
+
+	setInterval(update, 10);
+</script>
