@@ -61,6 +61,11 @@
 			ctx.font = "bold 24px Arial";
 			ctx.fillText("Score: " + score, 20, 40);
 		}
+		function uwu() {
+			ctx.fillStyle = "white";
+			ctx.font = "bold 24px Arial";
+			ctx.fillText("Version: 2.1.0A" 20, 40);
+		}
 
 		function drawBackground() {
 			ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
@@ -143,7 +148,7 @@
 					score++;
 					resetPlastic();
 					if (score === 15) {
-						speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
+						speed += 300; // Adjust the speed decrease here (lower value for slower speed)
 					}
 					if (score >= 30) {
 						isGameOver = true;
