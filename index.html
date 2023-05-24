@@ -61,10 +61,11 @@
 			ctx.font = "bold 24px Arial";
 			ctx.fillText("Score: " + score, 20, 40);
 		}
+
 		function uwu() {
 			ctx.fillStyle = "white";
 			ctx.font = "bold 24px Arial";
-			ctx.fillText("Version: 2.1.0A" + 20, 40);
+			ctx.fillText("Version: 2.1.0A", 20, 80);
 		}
 
 		function drawBackground() {
@@ -88,7 +89,7 @@
 			ctx.font = "bold 24px Arial";
 			ctx.fillText("Press F5 to play again", canvas.width / 2, canvas.height / 2 + 60);
 		}
-		
+
 		function gameWin() {
 			ctx.fillStyle = "black";
 			ctx.globalAlpha = 0.7;
@@ -106,6 +107,7 @@
 			ctx.font = "bold 24px Arial";
 			ctx.fillText("Press F5 to play again", canvas.width / 2, canvas.height / 2 + 60);
 		}
+
 		function update() {
 			if (!isGameOver) {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -125,43 +127,46 @@
 						}
 						if (score >= 30) {
 							isGameOver = true;
-							gameOver();
+							gameWin();
 						}
 					}
 				}
-						if (score < 0) {
+
+				if (score < 0) {
+					isGameOver = true;
+					gameOver();
+				}
+			}
+		}
+
+		canvas.addEventListener("click", function(event) {
+			const rect = canvas.getBoundingClientRect();
+			const mousePos = {
+				x: event.clientX - rect.left,
+				y: event.clientY - rect.top
+			};
+
+			if (!isGameOver) {
+				if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
+					if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
+						score++;
+						resetPlastic();
+						if (score === 15) {
+							speed += 300; // Adjust the speed decrease here (lower value for slower speed)
+						}
+						if (score >= 30) {
 							isGameOver = true;
-							gameOver();
+							gameWin();
 						}
-		}
-	}
-
-	canvas.addEventListener("click", function(event) {
-		const rect = canvas.getBoundingClientRect();
-		const mousePos = {
-			x: event.clientX - rect.left,
-			y: event.clientY - rect.top
-		};
-
-		if (!isGameOver) {
-			if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
-				if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
-					score++;
-					resetPlastic();
-					if (score === 15) {
-						speed += 300; // Adjust the speed decrease here (lower value for slower speed)
-					}
-					if (score >= 30) {
-						isGameOver = true;
-						gameWin();
 					}
 				}
+				else {
+					score--;
+				}
 			}
-			else {
-				score--;
-			}
-		}
-	});
+		});
 
-	setInterval(update, 10);
-</script>
+		setInterval(update, 10);
+	</script>
+</body>
+</html>
