@@ -138,7 +138,8 @@
 				}
 
 				if (score < 0) {
-					score = 0
+					score = 0;
+					update();
 					isGameOver = true;
 					gameOver();
 				}
