@@ -129,6 +129,10 @@
 							isGameOver = true;
 							gameWin();
 						}
+						if (score < 15) {
+							speed += 10;
+							gameWin();
+						}
 					}
 				}
 
@@ -156,6 +160,10 @@
 						}
 						if (score >= 30) {
 							isGameOver = true;
+							gameWin();
+						}
+						if (score < 15) {
+							speed += 10;
 							gameWin();
 						}
 					}
