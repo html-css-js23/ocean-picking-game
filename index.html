@@ -49,6 +49,7 @@
 			}
 		}
 
+		
 		function resetPlastic() {
 			plasticX = canvas.width - plasticWidth;
 			plasticY = Math.random() * (canvas.height - plasticHeight);
@@ -145,7 +146,13 @@
 				}
 			}
 		}
-
+		document.addEventListener("keydown", function(event) {
+  // Check if the key pressed is the desired key (e.g., Enter key)
+  if (event.key === "Enter") {
+    // Perform some action
+    console.log("Enter key pressed!");
+  }
+});
 		canvas.addEventListener("click", function(event) {
 			const rect = canvas.getBoundingClientRect();
 			const mousePos = {
