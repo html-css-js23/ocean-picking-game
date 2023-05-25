@@ -25,6 +25,9 @@
 		canvas.height = window.innerHeight;
 
 		const oceanImage = new Image();
+		deadImage.src = "dead.jpg";
+		
+		const deadImage = new Image();
 		oceanImage.src = "ocean.jpg";
 
 		const plasticImage = new Image();
@@ -33,6 +36,7 @@
 		let score = 0;
 		let speed = 650; // Adjust the speed here (lower value for slower speed)
 		let isGameOver = false;
+		let death = 0;
 
 		const plasticWidth = 125;
 		const plasticHeight = 125;
@@ -72,6 +76,9 @@
 		}
 
 		function drawBackground() {
+			if (death === 12) {
+			ctx.drawImage(deadImage, 0, 0, canvas.width, canvas.height);
+			}
 			ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
 		}
 
@@ -151,6 +158,11 @@
   if (event.key === "Enter") {
     // Perform some action
     console.log("Enter key pressed!");
+	death += 1;
+	  if (death === 12) {
+	  death = 0;
+		  drawBackground();
+	  }
   }
 });
 		canvas.addEventListener("click", function(event) {
