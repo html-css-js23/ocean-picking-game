@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="icon" href="pixil-frame-0 (1).png" type="image/png">
-
 	<title>Ocean Picking Game</title>
 	<style>
 		body {
@@ -25,13 +24,13 @@
 		canvas.height = window.innerHeight;
 
 		const oceanImage = new Image();
-		deadImage.src = "dead.png";
-		
-		const deadImage = new Image();
 		oceanImage.src = "ocean.jpg";
 
 		const plasticImage = new Image();
 		plasticImage.src = "plastic.png";
+
+		const deadImage = new Image();
+		deadImage.src = "dead.png";
 
 		let score = 0;
 		let speed = 650; // Adjust the speed here (lower value for slower speed)
@@ -53,7 +52,6 @@
 			}
 		}
 
-		
 		function resetPlastic() {
 			plasticX = canvas.width - plasticWidth;
 			plasticY = Math.random() * (canvas.height - plasticHeight);
@@ -77,9 +75,10 @@
 
 		function drawBackground() {
 			if (death === 12) {
-			ctx.drawImage(deadImage, 0, 0, canvas.width, canvas.height);
+				ctx.drawImage(deadImage, 0, 0, canvas.width, canvas.height);
+			} else {
+				ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
 			}
-			ctx.drawImage(oceanImage, 0, 0, canvas.width, canvas.height);
 		}
 
 		function gameOver() {
@@ -153,18 +152,20 @@
 				}
 			}
 		}
+
 		document.addEventListener("keydown", function(event) {
-  // Check if the key pressed is the desired key (e.g., Enter key)
-  if (event.key === "Enter") {
-    // Perform some action
-    console.log("Enter key pressed!");
-	death += 1;
-	  if (death === 12) {
-	  death = 0;
-		  drawBackground();
-	  }
-  }
-});
+			// Check if the key pressed is the desired key (e.g., Enter key)
+			if (event.key === "Enter") {
+				// Perform some action
+				console.log("Enter key pressed!");
+				death += 1;
+				if (death === 12) {
+					death = 0;
+					drawBackground();
+				}
+			}
+		});
+
 		canvas.addEventListener("click", function(event) {
 			const rect = canvas.getBoundingClientRect();
 			const mousePos = {
@@ -178,7 +179,7 @@
 						score++;
 						resetPlastic();
 						if (score === 15) {
-							speed += 300; // Adjust the speed decrease here (lower value for slower speed)
+							speed += 300; // Adjust the speed increase here (lower value for slower speed)
 						}
 						if (score >= 30) {
 							isGameOver = true;
@@ -187,10 +188,9 @@
 						if (score <= 14) {
 							speed = 650;
 						}
+					} else {
+						score--;
 					}
-				}
-				else {
-					score--;
 				}
 			}
 		});
