@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="icon" href="pixil-frame-0 (1).png" type="image/png">
+
 	<title>Ocean Picking Game</title>
 	<style>
 		body {
@@ -15,6 +16,25 @@
 	</style>
 </head>
 <body>
+	<canvas id="canvas"></canvas>
+	<script>
+		const canvas = document.getElementById("canvas");
+		const ctx = canvas.getContext("2d");
+
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		const deadImage = new Image();
+		deadImage.src = "dead.png";
+
+		const oceanImage = new Image();
+		oceanImage.src = "ocean.jpg";
+
+		// Rest of the code...
+	</script>
+</body>
+</html>
+
 	<canvas id="canvas"></canvas>
 	<script>
 		const canvas = document.getElementById("canvas");
