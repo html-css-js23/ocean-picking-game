@@ -168,36 +168,31 @@
 		});
 
 		canvas.addEventListener("click", function(event) {
-	const rect = canvas.getBoundingClientRect();
-	const mousePos = {
-		x: event.clientX - rect.left,
-		y: event.clientY - rect.top
-	};
+			const rect = canvas.getBoundingClientRect();
+			const mousePos = {
+				x: event.clientX - rect.left,
+				y: event.clientY - rect.top
+			};
 
-	if (!isGameOver) {
-		if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
-			if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
-				score++;
-				resetPlastic();
-				if (score === 15) {
-					speed += 300; // Adjust the speed increase here (lower value for slower speed)
+			if (!isGameOver) {
+				if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth &&
+					plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
+					score++;
+					resetPlastic();
+					if (score === 15) {
+						speed += 300; // Adjust the speed increase here (lower value for slower speed)
+					}
+					if (score >= 30) {
+						isGameOver = true;
+						gameWin();
+					}
+				} else {
+					score--;
 				}
-				if (score >= 30) {
-					isGameOver = true;
-					gameWin();
-				}
-				if (score <= 14) {
-					speed = 650;
-				}
-			} else {
-				score--;
 			}
-		} else {
-			score--;
-		}
-	}
-});
+		});
 
+		setInterval(update, 10);
 	</script>
 </body>
 </html>
