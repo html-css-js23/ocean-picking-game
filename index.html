@@ -44,11 +44,13 @@
 		let plasticY = Math.random() * (canvas.height - plasticHeight);
 
 		function movePlastic() {
-			plasticX -= (speed / 1000) * 10;
-			if (plasticX + plasticWidth <= 0) {
-				resetPlastic();
-				if (score > 0) {
-					score--;
+			if (!isGameOver) {
+				plasticX -= (speed / 1000) * 10;
+				if (plasticX + plasticWidth <= 0) {
+					resetPlastic();
+					if (score > 0) {
+						score--;
+					}
 				}
 			}
 		}
@@ -71,7 +73,7 @@
 		function uwu() {
 			ctx.fillStyle = "white";
 			ctx.font = "bold 24px Arial";
-			ctx.fillText("Version: 2.2.8", 20, 80);
+			ctx.fillText("Version: 2.2.3", 20, 80);
 		}
 
 		function drawBackground() {
@@ -83,6 +85,7 @@
 		}
 
 		function gameOver() {
+			isGameOver = true;
 			ctx.fillStyle = "black";
 			ctx.globalAlpha = 0.7;
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -101,6 +104,7 @@
 		}
 
 		function gameWin() {
+			isGameOver = true;
 			ctx.fillStyle = "black";
 			ctx.globalAlpha = 0.7;
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -133,29 +137,19 @@
 						score++;
 						resetPlastic();
 						if (score === 15) {
-							if (death === 12) {
-								speed = 10000;
-							} else {
-								speed = 900;
-							}
+							speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
 						}
 						if (score >= 30) {
-							isGameOver = true;
 							gameWin();
 						}
 						if (score <= 14) {
-							if (death === 12) {
-								speed = 10000;
-							} else {
-								speed = 650;
-							}
+							speed = 650;
 						}
 					}
 				}
 
 				if (score < 0) {
 					score = 0;
-					update();
 					isGameOver = true;
 					gameOver();
 				}
@@ -164,7 +158,6 @@
 
 		document.addEventListener("keydown", function(event) {
 			if (event.key === "Enter") {
-				console.log("Enter key pressed!");
 				death += 1;
 				if (death === 12) {
 					death = 0;
@@ -190,7 +183,6 @@
 							speed += 300; // Adjust the speed increase here (lower value for slower speed)
 						}
 						if (score >= 30) {
-							isGameOver = true;
 							gameWin();
 						}
 						if (score <= 14) {
