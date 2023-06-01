@@ -155,14 +155,12 @@
 		}
 
 		document.addEventListener("keydown", function(event) {
-			// Check if the key pressed is the desired key (e.g., Enter key)
 			if (event.key === "Enter") {
-				// Perform some action
 				console.log("Enter key pressed!");
 				death += 1;
 				if (death === 12) {
 					death = 0;
-					drawBackground();
+					oceanImage.src = "dead.png";
 				}
 			}
 		});
@@ -175,16 +173,22 @@
 			};
 
 			if (!isGameOver) {
-				if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth &&
-					plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
-					score++;
-					resetPlastic();
-					if (score === 15) {
-						speed += 300; // Adjust the speed increase here (lower value for slower speed)
-					}
-					if (score >= 30) {
-						isGameOver = true;
-						gameWin();
+				if (plasticX <= mousePos.x && mousePos.x <= plasticX + plasticWidth) {
+					if (plasticY <= mousePos.y && mousePos.y <= plasticY + plasticHeight) {
+						score++;
+						resetPlastic();
+						if (score === 15) {
+							speed += 300; // Adjust the speed increase here (lower value for slower speed)
+						}
+						if (score >= 30) {
+							isGameOver = true;
+							gameWin();
+						}
+						if (score <= 14) {
+							speed = 650;
+						}
+					} else {
+						score--;
 					}
 				} else {
 					score--;
