@@ -71,7 +71,7 @@
 		function uwu() {
 			ctx.fillStyle = "white";
 			ctx.font = "bold 24px Arial";
-			ctx.fillText("Version: 2.2.5", 20, 80);
+			ctx.fillText("Version: 2.2.6", 20, 80);
 		}
 
 		function drawBackground() {
@@ -133,14 +133,24 @@
 						score++;
 						resetPlastic();
 						if (score === 15) {
-							speed -= 10; // Adjust the speed decrease here (lower value for slower speed)
+							if (death === 12) {
+								speed = 10000;
+							}
+							else {
+								speed = 900;
+							}
 						}
 						if (score >= 30) {
 							isGameOver = true;
 							gameWin();
 						}
 						if (score <= 14) {
-							speed = 650;
+							if (death === 12) {
+								speed = 10000;
+							}
+							else {
+								speed = 650;
+							}
 						}
 					}
 				}
