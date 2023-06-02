@@ -157,7 +157,7 @@
 		}
 
 		document.addEventListener("keydown", function(event) {
-			if (event.key === "Enter") {
+			if (event.ctrlKey) {
 				death += 1;
 				if (death === 12) {
 					death = 0;
